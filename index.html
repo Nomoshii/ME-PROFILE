@@ -13,9 +13,10 @@
             --bg: #0b0b0b;
             --card: #1a1a1d;
             --muted: #8f8f96;
-            --accent1: #d40b3d;
-            --accent2: #ffd000;
-            --glow: 0 10px 40px rgba(108, 0, 255, 0.3);
+            --accent-purple: #9c27b0;
+            --accent-cyan: #7be6ff;
+            --player-fg: #ffffff;
+            --glow: 0 10px 40px rgba(156, 39, 176, 0.4);
             --pulse-speed: 2s;
         }
         
@@ -28,31 +29,35 @@
         body {
             height: 100%;
             margin: 0;
-            background: var(--bg);
+            background: #050110;
             font-family: 'Poppins', system-ui, Segoe UI, Roboto, Arial;
             overflow-x: hidden;
             color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        /* 3D grid tunnel */
+        /* --- BACKGROUND STYLES --- */
         
         .tunnel {
             position: fixed;
             inset: 0;
             z-index: -3;
             overflow: hidden;
-            background: #050505;
+            background: #050110;
             display: flex;
             align-items: center;
             justify-content: center;
+            perspective: 800px;
         }
         
         .grid {
             width: 180vmax;
             height: 180vmax;
             transform: translateZ(-600px);
-            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(123, 230, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(123, 230, 255, 0.05) 1px, transparent 1px);
             background-size: 120px 120px;
-            filter: contrast(0.6) saturate(1);
+            filter: contrast(1) saturate(1.5);
             animation: moveTunnel 12s linear infinite;
         }
         
@@ -67,7 +72,6 @@
                 transform: translateZ(-900px) rotateX(3deg) rotateY(2deg) scale(1);
             }
         }
-        /* floating stars */
         
         .dots {
             position: fixed;
@@ -78,8 +82,8 @@
         
         .dot {
             position: absolute;
-            width: 3px;
-            height: 3px;
+            width: 2px;
+            height: 2px;
             border-radius: 50%;
             background: white;
             opacity: 0.7;
@@ -97,15 +101,14 @@
                 opacity: 1;
             }
         }
-        /* ambient light behind card */
         
         .ambient-light {
             position: absolute;
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(108, 0, 255, 0.3), transparent 70%);
-            filter: blur(200px);
+            background: radial-gradient(circle, rgba(230, 100, 255, 0.5), rgba(156, 39, 176, 0.2), transparent 70%);
+            filter: blur(280px);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -127,7 +130,7 @@
                 opacity: 0.6;
             }
         }
-        /* center content */
+        /* --- CARD/PROFILE STYLES --- */
         
         .wrap {
             min-height: 100vh;
@@ -137,11 +140,11 @@
             padding: 40px;
             position: relative;
             z-index: 1;
+            width: 100%;
         }
-        /* profile card */
         
         .card {
-            width: 880px;
+            width: 450px;
             max-width: 95%;
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(12, 12, 12, 0.15));
             border-radius: 24px;
@@ -154,7 +157,7 @@
             overflow: hidden;
         }
         
-        .top {
+        .top-profile {
             display: flex;
             align-items: center;
             gap: 28px;
@@ -167,23 +170,13 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 5px solid rgba(255, 255, 255, 0.08);
+            border: 5px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-purple);
             background: linear-gradient(135deg, #0e0e0e, #141214);
-            animation: rotateAvatar 15s linear infinite;
-        }
-        
-        @keyframes rotateAvatar {
-            0% {
-                transform: rotateY(0deg);
-            }
-            100% {
-                transform: rotateY(360deg);
-            }
         }
         
         .avatar img {
@@ -194,9 +187,10 @@
         
         h1 {
             margin: 12px 0 6px;
-            font-size: 48px;
-            color: var(--accent1);
+            font-size: 38px;
+            color: var(--accent-cyan);
             letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(123, 230, 255, 0.5);
         }
         
         .bio {
@@ -204,47 +198,15 @@
             font-size: 16px;
             max-width: 760px;
             margin-bottom: 16px;
+            line-height: 1.6;
         }
         
         .meta {
-            margin-top: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
+            margin-top: -10px;
             color: var(--muted);
             font-size: 14px;
-            justify-content: center;
         }
-        
-        .socials {
-            margin-top: 18px;
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-        
-        .sbtn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 20px rgba(108, 0, 255, 0.1);
-            transition: all 0.25s ease;
-            color: white;
-            font-size: 22px;
-            text-decoration: none;
-        }
-        
-        .sbtn:hover {
-            transform: scale(1.15) rotate(5deg);
-            box-shadow: 0 20px 60px rgba(108, 0, 255, 0.25);
-            background: rgba(255, 255, 255, 0.06);
-        }
-        /* player */
+        /* --- PLAYER STYLES --- */
         
         .player-wrap {
             margin-top: 28px;
@@ -253,28 +215,55 @@
         }
         
         .player {
-            width: 780px;
-            max-width: 96%;
-            background: rgba(10, 10, 10, 0.65);
+            width: 100%;
+            max-width: 450px;
+            background: rgba(10, 10, 10, 0.8);
             border-radius: 16px;
-            padding: 14px 16px;
+            padding: 16px 20px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             gap: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(156, 39, 176, 0.4);
+        }
+        
+        .top-row {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 12px;
         }
         
         .music-icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #111, #222);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            /* Remove background color */
+            background: none;
+            overflow: hidden;
+            /* Ensure image fits perfectly */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            box-shadow: 0 0 15px rgba(108, 0, 255, 0.3);
+            font-size: 18px;
+            box-shadow: 0 0 5px rgba(156, 39, 176, 0.6);
+            /* Reduced shadow for a cleaner frame */
+        }
+        
+        .music-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--accent-cyan);
+            margin-left: auto;
         }
         
         .track-info {
@@ -285,8 +274,8 @@
         
         .track-title {
             font-weight: 600;
-            color: var(--accent2);
-            font-size: 17px;
+            color: var(--player-fg);
+            font-size: 16px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -294,53 +283,81 @@
         
         .track-sub {
             color: var(--muted);
-            font-size: 13px;
-            margin-top: 4px;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        /* --- PROGRESS BAR & TIME --- */
+        
+        .progress-container {
+            width: 100%;
+            padding: 0 4px;
         }
         
-        .controls {
+        .progress-bar-wrap {
             display: flex;
-            gap: 12px;
             align-items: center;
+            gap: 8px;
+            margin: 10px 0 5px;
         }
         
-        .play-btn,
-        .mute-btn {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            border: none;
-            background: #ffffff11;
+        .time-label {
+            color: var(--muted);
+            font-size: 12px;
+            min-width: 30px;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress-bar>i {
+            display: block;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+            border-radius: 6px;
+            transition: width .2s linear;
+        }
+        /* --- CONTROL BUTTON STYLES (General) --- */
+        
+        .control-btn {
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             color: white;
-            font-size: 18px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+            text-decoration: none;
         }
+        /* Hover effect (applies to all buttons) */
         
-        .play-btn:hover,
-        .mute-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(108, 0, 255, 0.3);
+        .control-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px var(--accent-purple);
         }
+        /* --- SOCIAL ICON ROW --- */
         
-        .progress {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 6px;
-            overflow: hidden;
+        .social-icons-row {
+            display: flex;
+            justify-content: space-evenly;
+            width: 100%;
+            padding: 10px 0;
             margin-top: 10px;
         }
         
-        .progress>i {
-            display: block;
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--accent1), var(--accent2));
-            border-radius: 6px;
-            transition: width .2s linear;
+        .social-icons-row .control-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 22px;
         }
         
         .bottom-bubble {
@@ -357,23 +374,22 @@
             font-weight: 700;
             box-shadow: 0 14px 50px rgba(123, 230, 255, .08);
             font-size: 15px;
+            cursor: default;
         }
         
-        @media (max-width: 720px) {
-            h1 {
-                font-size: 36px;
+        @media (max-width: 550px) {
+            .card {
+                padding: 24px 16px;
             }
-            .avatar {
-                width: 90px;
-                height: 90px;
+            .progress-container {
+                padding: 0;
             }
-            .player {
-                flex-direction: column;
-                align-items: stretch;
+            .time-label {
+                min-width: 25px;
             }
-            .controls {
-                justify-content: flex-end;
-                margin-top: 10px;
+            .social-icons-row .control-btn {
+                width: 45px;
+                height: 45px;
             }
         }
     </style>
@@ -388,35 +404,42 @@
 
     <div class="wrap">
         <div class="card">
-            <div class="top">
+            <div class="top-profile">
                 <div class="avatar">
-                    <img src="me/finalboss.jpg" alt="CHAI POR avatar" onerror="this.src='https://via.placeholder.com/120'">
+                    <img src="me/finalboss.jpg" alt="CHAI POR avatar" onerror="this.src='https://via.placeholder.com/120/1a1a1d/ffffff?text=CP'">
                 </div>
                 <h1>CHAI POR</h1>
-                <div class="bio">Kindness sometimes leads to even greater tragedy.</div>
-                <div class="meta">
-                    <div class="meta-stats">📍 Phnom Penh, Cambodia</div>
-                </div>
-                <div class="socials">
-                    <a class="sbtn" href="https://t.me/Mornchaipor">✈</a>
-                    <a class="sbtn" href="https://github.com/Nomoshii">:O</a>
-                    <a class="sbtn" href="https://web.facebook.com/chhaypor4/">f</a>
-                </div>
+                <div class="bio">There Are Only So Many Lives I Can Value. And I Decided Who Those People Were Six Years Ago. So You Shouldn’t Try To Ask For My Pity. Because Right Now, I Don’t Have Time To Spare Or Room In My Heart.</div>
+                <div class="meta">📍 Phnom Penh, Cambodia</div>
             </div>
 
             <div class="player-wrap">
                 <div class="player" id="playerCard">
-                    <div class="music-icon">♪</div>
-                    <div class="track-info">
-                        <div class="track-title" id="trackTitle">Loading track...</div>
-                        <div class="track-sub" id="trackSub">YouTube · Click to unmute</div>
-                        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                            <i id="progressBar"></i>
+                    <div class="top-row">
+                        <div class="music-icon">
+                            <img src="https://img.youtube.com/vi/vHICwpoiM4I/default.jpg" alt="YouTube Thumbnail">
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title" id="trackTitle">Loading track...</div>
+                            <div class="track-sub" id="trackSub">YouTube · Click anywhere to unmute</div>
+                        </div>
+                        <div class="indicator"></div>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar-wrap">
+                            <span class="time-label" id="currentTimeLabel">0:00</span>
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                <i id="progressBar"></i>
+                            </div>
+                            <span class="time-label" id="durationLabel">0:00</span>
                         </div>
                     </div>
-                    <div class="controls">
-                        <button class="play-btn" id="playBtn">⏯</button>
-                        <button class="mute-btn" id="muteBtn">🔇</button>
+
+                    <div class="social-icons-row">
+                        <a class="control-btn" href="https://t.me/Mornchaipor">✈</a>
+                        <a class="control-btn" href="https://github.com/Nomoshii">:O</a>
+                        <a class="control-btn" href="https://web.facebook.com/chhaypor4/">f</a>
                     </div>
                 </div>
             </div>
@@ -430,10 +453,10 @@
     <div id="ytplayer" style="display:none;"></div>
 
     <script>
-        // floating dots
+        // floating dots (stars)
         (function makeDots() {
             const container = document.querySelector('.dots');
-            const count = 35;
+            const count = 60;
             for (let i = 0; i < count; i++) {
                 const d = document.createElement('div');
                 d.className = 'dot';
@@ -445,14 +468,22 @@
             }
         })();
 
-        // YouTube Player
+        // --- YOUTUBE PLAYER LOGIC ---
         const YT_ID = 'vHICwpoiM4I';
         let player, isMuted = true;
+
         (function() {
             var tag = document.createElement('script');
             tag.src = "https://www.youtube.com/iframe_api";
             document.head.appendChild(tag);
         })();
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${min}:${sec}`;
+        }
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('ytplayer', {
@@ -466,7 +497,6 @@
                     rel: 0,
                     showinfo: 0,
                     loop: 1,
-                    playlist: YT_ID,
                     mute: 1
                 },
                 events: {
@@ -481,6 +511,7 @@
             isMuted = true;
             updateTrackInfo();
             startProgressUpdater();
+            document.getElementById('durationLabel').textContent = formatTime(player.getDuration());
         }
 
         function updateTrackInfo() {
@@ -488,48 +519,16 @@
                 const info = player.getVideoData();
                 const title = info && info.title ? info.title : 'YouTube Track';
                 document.getElementById('trackTitle').textContent = title;
-                document.getElementById('trackSub').textContent = 'YouTube · Click to unmute';
+                document.getElementById('trackSub').textContent = 'YouTube · Click anywhere to unmute';
             } catch {}
         }
 
         function onStateChange(e) {
-            updatePlayBtn();
+            // Placeholder: No visual buttons to update.
         }
 
-        document.getElementById('playBtn').addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            if (!player) return;
-            const state = player.getPlayerState();
-            if (state === YT.PlayerState.PLAYING) player.pauseVideo();
-            else player.playVideo();
-            updatePlayBtn();
-        });
-
-        const muteBtn = document.getElementById('muteBtn');
-        muteBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            if (!player) return;
-            if (isMuted) {
-                player.unMute();
-                isMuted = false;
-                muteBtn.textContent = '🔊';
-            } else {
-                player.mute();
-                isMuted = true;
-                muteBtn.textContent = '🔇';
-            }
-        });
-
-        function updatePlayBtn() {
-            const b = document.getElementById('playBtn');
-            if (!player) {
-                b.textContent = '⏯';
-                return;
-            }
-            const s = player.getPlayerState();
-            if (s === YT.PlayerState.PLAYING) b.textContent = '⏸';
-            else b.textContent = '▶';
-        }
+        const currentTimeLabel = document.getElementById('currentTimeLabel');
+        const durationLabel = document.getElementById('durationLabel');
 
         function startProgressUpdater() {
             const bar = document.getElementById('progressBar');
@@ -539,8 +538,14 @@
                     const dur = player.getDuration() || 0;
                     const cur = player.getCurrentTime() || 0;
                     const pct = dur ? Math.min(100, (cur / dur) * 100) : 0;
+
                     bar.style.width = pct + '%';
-                    document.querySelector('.progress').setAttribute('aria-valuenow', Math.round(pct));
+                    document.querySelector('.progress-bar').setAttribute('aria-valuenow', Math.round(pct));
+
+                    // Update time labels
+                    currentTimeLabel.textContent = formatTime(cur);
+                    durationLabel.textContent = formatTime(dur);
+
                 } catch {}
             }, 500);
         }
@@ -554,14 +559,12 @@
                 try {
                     player.unMute();
                     isMuted = false;
-                    muteBtn.textContent = '🔊';
+                    document.getElementById('trackSub').textContent = 'YouTube · Playing';
                 } catch {}
             }
             document.removeEventListener('click', userInteractUnmute);
         }
         document.addEventListener('click', userInteractUnmute);
-        updatePlayBtn();
-        muteBtn.textContent = '🔇';
     </script>
 </body>
 
