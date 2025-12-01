@@ -11,15 +11,17 @@
     <style>
          :root {
             --bg: #0b0b0b;
-            --card: #1b1b1d;
+            --card: #1a1a1d;
             --muted: #8f8f96;
-            --accent1: #ffd000;
-            --accent2: #6be7ff;
-            --glow: 0 10px 30px rgba(108, 0, 255, .16);
+            --accent1: #d40b3d;
+            --accent2: #ffd000;
+            --glow: 0 10px 40px rgba(108, 0, 255, 0.3);
+            --pulse-speed: 2s;
         }
         
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
         
         html,
@@ -28,13 +30,15 @@
             margin: 0;
             background: var(--bg);
             font-family: 'Poppins', system-ui, Segoe UI, Roboto, Arial;
+            overflow-x: hidden;
+            color: white;
         }
         /* 3D grid tunnel */
         
         .tunnel {
             position: fixed;
             inset: 0;
-            z-index: -2;
+            z-index: -3;
             overflow: hidden;
             background: #050505;
             display: flex;
@@ -46,21 +50,21 @@
             width: 180vmax;
             height: 180vmax;
             transform: translateZ(-600px);
-            background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 120px 120px;
-            filter: contrast(.6) saturate(1);
-            animation: moveTunnel 10s linear infinite;
+            filter: contrast(0.6) saturate(1);
+            animation: moveTunnel 12s linear infinite;
         }
         
         @keyframes moveTunnel {
             0% {
-                transform: translateZ(-800px) rotateX(4deg) rotateY(2deg) scale(1);
+                transform: translateZ(-900px) rotateX(3deg) rotateY(2deg) scale(1);
             }
             50% {
-                transform: translateZ(-600px) rotateX(1deg) rotateY(-1deg) scale(1.02);
+                transform: translateZ(-600px) rotateX(1deg) rotateY(-1deg) scale(1.03);
             }
             100% {
-                transform: translateZ(-800px) rotateX(4deg) rotateY(2deg) scale(1);
+                transform: translateZ(-900px) rotateX(3deg) rotateY(2deg) scale(1);
             }
         }
         /* floating stars */
@@ -68,7 +72,7 @@
         .dots {
             position: fixed;
             inset: 0;
-            z-index: -1;
+            z-index: -2;
             pointer-events: none;
         }
         
@@ -78,8 +82,50 @@
             height: 3px;
             border-radius: 50%;
             background: white;
-            opacity: 0.85;
-            filter: blur(.6px);
+            opacity: 0.7;
+            filter: blur(1px);
+            animation: pulse var(--pulse-speed) infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+        /* ambient light behind card */
+        
+        .ambient-light {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(108, 0, 255, 0.3), transparent 70%);
+            filter: blur(200px);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: floatLight 6s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+        
+        @keyframes floatLight {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translate(-52%, -48%) scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
         }
         /* center content */
         
@@ -89,18 +135,23 @@
             align-items: center;
             justify-content: center;
             padding: 40px;
+            position: relative;
+            z-index: 1;
         }
         /* profile card */
         
         .card {
             width: 880px;
             max-width: 95%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(12, 12, 12, 0.08));
-            border-radius: 22px;
-            padding: 34px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(12, 12, 12, 0.15));
+            border-radius: 24px;
+            padding: 36px;
             box-shadow: var(--glow);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
         
         .top {
@@ -113,16 +164,26 @@
         }
         
         .avatar {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 6px solid rgba(255, 255, 255, 0.03);
+            border: 5px solid rgba(255, 255, 255, 0.08);
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
             background: linear-gradient(135deg, #0e0e0e, #141214);
+            animation: rotateAvatar 15s linear infinite;
+        }
+        
+        @keyframes rotateAvatar {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(360deg);
+            }
         }
         
         .avatar img {
@@ -133,15 +194,16 @@
         
         h1 {
             margin: 12px 0 6px;
-            font-size: 44px;
+            font-size: 48px;
             color: var(--accent1);
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
         }
         
         .bio {
             color: var(--muted);
             font-size: 16px;
             max-width: 760px;
+            margin-bottom: 16px;
         }
         
         .meta {
@@ -153,49 +215,39 @@
             font-size: 14px;
             justify-content: center;
         }
-        /* social icons row */
         
         .socials {
             margin-top: 18px;
             display: flex;
-            gap: 14px;
+            gap: 16px;
             justify-content: center;
         }
         
         .sbtn {
-            width: 46px;
-            height: 46px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 18px rgba(108, 0, 255, 0.08);
-            transition: transform .18s, box-shadow .18s, background .18s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(108, 0, 255, 0.1);
+            transition: all 0.25s ease;
             color: white;
+            font-size: 22px;
             text-decoration: none;
         }
         
         .sbtn:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(108, 0, 255, 0.12);
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 20px 60px rgba(108, 0, 255, 0.25);
             background: rgba(255, 255, 255, 0.06);
         }
-        /* stats + view count */
-        
-        .meta-stats {
-            margin-top: 12px;
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            align-items: center;
-            color: var(--muted);
-        }
-        /* Music player */
+        /* player */
         
         .player-wrap {
-            margin-top: 26px;
+            margin-top: 28px;
             display: flex;
             justify-content: center;
         }
@@ -203,14 +255,14 @@
         .player {
             width: 780px;
             max-width: 96%;
-            background: rgba(10, 10, 10, 0.6);
-            border-radius: 14px;
-            padding: 12px 14px;
+            background: rgba(10, 10, 10, 0.65);
+            border-radius: 16px;
+            padding: 14px 16px;
             display: flex;
             align-items: center;
-            gap: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            gap: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
         }
         
         .music-icon {
@@ -222,6 +274,7 @@
             align-items: center;
             justify-content: center;
             font-size: 22px;
+            box-shadow: 0 0 15px rgba(108, 0, 255, 0.3);
         }
         
         .track-info {
@@ -232,8 +285,8 @@
         
         .track-title {
             font-weight: 600;
-            color: white;
-            font-size: 16px;
+            color: var(--accent2);
+            font-size: 17px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -247,15 +300,15 @@
         
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
         }
         
         .play-btn,
         .mute-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             border: none;
             background: #ffffff11;
             display: inline-flex;
@@ -263,12 +316,14 @@
             justify-content: center;
             cursor: pointer;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
         }
         
         .play-btn:hover,
         .mute-btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(108, 0, 255, 0.3);
         }
         
         .progress {
@@ -283,104 +338,85 @@
             display: block;
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--accent2), #ff5edb);
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
             border-radius: 6px;
             transition: width .2s linear;
         }
-        /* bottom bubble */
         
         .bottom-bubble {
             display: flex;
             justify-content: center;
-            margin-top: 22px;
+            margin-top: 28px;
         }
         
         .claim {
             background: linear-gradient(90deg, #ff4ecb, #7be6ff);
             color: black;
-            padding: 10px 18px;
-            border-radius: 18px;
+            padding: 12px 22px;
+            border-radius: 22px;
             font-weight: 700;
-            box-shadow: 0 12px 40px rgba(123, 230, 255, .07);
+            box-shadow: 0 14px 50px rgba(123, 230, 255, .08);
+            font-size: 15px;
         }
-        /* responsiveness */
         
-        @media (max-width:720px) {
+        @media (max-width: 720px) {
             h1 {
-                font-size: 34px
-            }
-            .card {
-                padding: 22px
+                font-size: 36px;
             }
             .avatar {
-                width: 86px;
-                height: 86px
+                width: 90px;
+                height: 90px;
             }
             .player {
                 flex-direction: column;
-                align-items: stretch
+                align-items: stretch;
             }
             .controls {
                 justify-content: flex-end;
-                margin-top: 8px
+                margin-top: 10px;
             }
         }
     </style>
 </head>
 
 <body>
-
-    <!-- tunnel background -->
     <div class="tunnel" aria-hidden="true">
         <div class="grid"></div>
     </div>
-
-    <!-- floating dots to add depth -->
     <div class="dots" aria-hidden="true"></div>
+    <div class="ambient-light" aria-hidden="true"></div>
 
-    <!-- main -->
     <div class="wrap">
-        <div class="card" role="main">
+        <div class="card">
             <div class="top">
-                <div class="avatar" id="avatar">
-                    <!-- Replace avatar.jpg with your image or use an external link -->
-                    <img src="me/finalboss.jpg" alt="CHAI POR avatar" onerror="this.src='https://www.reddit.com/r/CatsBeingCats/comments/1gcdg7h/show_me_your_fav_cat_meme/'">
+                <div class="avatar">
+                    <img src="me/finalboss.jpg" alt="CHAI POR avatar" onerror="this.src='https://via.placeholder.com/120'">
                 </div>
-
                 <h1>CHAI POR</h1>
                 <div class="bio">Kindness sometimes leads to even greater tragedy.</div>
-
                 <div class="meta">
-                    <div class="meta-stats">
-                        <!-- you can update view count dynamically if desired -->
-                        <div title="location">📍 Phnom Penh Cambodia.</div>
-                    </div>
+                    <div class="meta-stats">📍 Phnom Penh, Cambodia</div>
                 </div>
-
-                <div class="socials" id="socials">
-                    <!-- Replace the href="#" with your real URLs -->
-                    <a class="sbtn" href="https://t.me/Mornchaipor" title="Telegram (replace)" aria-label="Telegram">✈</a>
-                    <a class="sbtn" href="https://github.com/Nomoshii" title="GitHub" aria-label="GitHub">:O</a>
-                    <a class="sbtn" href="https://web.facebook.com/chhaypor4/" title="Facebook" aria-label="Facebook">f</a>
+                <div class="socials">
+                    <a class="sbtn" href="https://t.me/Mornchaipor">✈</a>
+                    <a class="sbtn" href="https://github.com/Nomoshii">:O</a>
+                    <a class="sbtn" href="https://web.facebook.com/chhaypor4/">f</a>
                 </div>
             </div>
 
-            <!-- music player -->
             <div class="player-wrap">
-                <div class="player" id="playerCard" role="region" aria-label="Music player">
+                <div class="player" id="playerCard">
                     <div class="music-icon">♪</div>
-
                     <div class="track-info">
                         <div class="track-title" id="trackTitle">Loading track...</div>
-                        <div class="track-sub" id="trackSub">YouTube · Click anywhere to unmute</div>
+                        <div class="track-sub" id="trackSub">YouTube · Click to unmute</div>
                         <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                             <i id="progressBar"></i>
                         </div>
                     </div>
-
                     <div class="controls">
-                        <button class="play-btn" id="playBtn" title="Play / Pause">⏯</button>
-                        <button class="mute-btn" id="muteBtn" title="Mute / Unmute">🔇</button>
+                        <button class="play-btn" id="playBtn">⏯</button>
+                        <button class="mute-btn" id="muteBtn">🔇</button>
                     </div>
                 </div>
             </div>
@@ -388,38 +424,30 @@
             <div class="bottom-bubble">
                 <div class="claim">Claim your profile • guns.lol/you</div>
             </div>
-
         </div>
     </div>
 
-    <!-- Hidden YouTube player -->
     <div id="ytplayer" style="display:none;"></div>
 
     <script>
-        /* ---------- Floating dots generation ---------- */
+        // floating dots
         (function makeDots() {
             const container = document.querySelector('.dots');
-            const count = 28;
+            const count = 35;
             for (let i = 0; i < count; i++) {
                 const d = document.createElement('div');
                 d.className = 'dot';
-                const x = Math.random() * 100,
-                    y = Math.random() * 100;
-                const s = 1 + Math.random() * 3;
-                d.style.left = x + 'vw';
-                d.style.top = y + 'vh';
-                d.style.opacity = (0.2 + Math.random() * 0.9).toFixed(2);
-                d.style.transform = `scale(${Math.random()*1.6})`;
+                d.style.left = Math.random() * 100 + 'vw';
+                d.style.top = Math.random() * 100 + 'vh';
+                d.style.opacity = (0.2 + Math.random() * 0.8).toFixed(2);
+                d.style.transform = `scale(${Math.random() * 1.5})`;
                 container.appendChild(d);
             }
         })();
 
-        /* ---------- YouTube player setup ---------- */
-        /* Video ID extracted from your link: vHICwpoiM4I */
+        // YouTube Player
         const YT_ID = 'vHICwpoiM4I';
         let player, isMuted = true;
-
-        /* load youtube iframe api */
         (function() {
             var tag = document.createElement('script');
             tag.src = "https://www.youtube.com/iframe_api";
@@ -448,7 +476,6 @@
             });
         }
 
-        /* when ready, update UI and start looped play (muted) */
         function onPlayerReady(e) {
             e.target.playVideo();
             isMuted = true;
@@ -456,25 +483,19 @@
             startProgressUpdater();
         }
 
-        /* show title using YouTube API when available */
         function updateTrackInfo() {
             try {
                 const info = player.getVideoData();
                 const title = info && info.title ? info.title : 'YouTube Track';
                 document.getElementById('trackTitle').textContent = title;
-                document.getElementById('trackSub').textContent = 'YouTube · Click anywhere to unmute';
-            } catch (err) {
-                // fallback
-                document.getElementById('trackTitle').textContent = 'YouTube Track';
-            }
+                document.getElementById('trackSub').textContent = 'YouTube · Click to unmute';
+            } catch {}
         }
 
         function onStateChange(e) {
-            // e.data == 1 playing, 2 paused, 0 ended
             updatePlayBtn();
         }
 
-        /* Play/Pause control */
         document.getElementById('playBtn').addEventListener('click', (ev) => {
             ev.stopPropagation();
             if (!player) return;
@@ -484,7 +505,6 @@
             updatePlayBtn();
         });
 
-        /* Mute/unmute control */
         const muteBtn = document.getElementById('muteBtn');
         muteBtn.addEventListener('click', (ev) => {
             ev.stopPropagation();
@@ -500,7 +520,6 @@
             }
         });
 
-        /* update play button icon */
         function updatePlayBtn() {
             const b = document.getElementById('playBtn');
             if (!player) {
@@ -512,7 +531,6 @@
             else b.textContent = '▶';
         }
 
-        /* progress updater */
         function startProgressUpdater() {
             const bar = document.getElementById('progressBar');
             setInterval(() => {
@@ -522,13 +540,11 @@
                     const cur = player.getCurrentTime() || 0;
                     const pct = dur ? Math.min(100, (cur / dur) * 100) : 0;
                     bar.style.width = pct + '%';
-                    // accessibility attr
                     document.querySelector('.progress').setAttribute('aria-valuenow', Math.round(pct));
-                } catch (e) {}
+                } catch {}
             }, 500);
         }
 
-        /* Clicking anywhere unmute (first click) to satisfy mobile/desktop autoplay restrictions */
         let firstInteraction = false;
 
         function userInteractUnmute() {
@@ -539,54 +555,14 @@
                     player.unMute();
                     isMuted = false;
                     muteBtn.textContent = '🔊';
-                } catch (e) {}
+                } catch {}
             }
             document.removeEventListener('click', userInteractUnmute);
         }
         document.addEventListener('click', userInteractUnmute);
-
-        /* initial icon states */
         updatePlayBtn();
         muteBtn.textContent = '🔇';
-
-        /* small helper: allow clicking progress bar to seek */
-        document.querySelector('.progress').addEventListener('click', function(e) {
-            if (!player) return;
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const pct = Math.max(0, Math.min(1, x / rect.width));
-            const dur = player.getDuration() || 0;
-            player.seekTo(dur * pct, true);
-        });
-
-        /* Accessibility: keyboard controls */
-        document.addEventListener('keydown', (e) => {
-            if (!player) return;
-            if (e.key === ' ') { // space toggle play/pause
-                e.preventDefault();
-                const s = player.getPlayerState();
-                if (s === YT.PlayerState.PLAYING) player.pauseVideo();
-                else player.playVideo();
-                updatePlayBtn();
-            } else if (e.key === 'm' || e.key === 'M') {
-                if (isMuted) {
-                    player.unMute();
-                    isMuted = false;
-                    muteBtn.textContent = '🔊';
-                } else {
-                    player.mute();
-                    isMuted = true;
-                    muteBtn.textContent = '🔇';
-                }
-            }
-        });
-
-        /* Prevent accidental text selection when double clicking on mobile */
-        document.addEventListener('touchstart', function() {}, {
-            passive: true
-        });
     </script>
-
 </body>
 
 </html>
