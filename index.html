@@ -18,6 +18,8 @@
             --player-fg: #ffffff;
             --glow: 0 10px 40px rgba(156, 39, 176, 0.4);
             --pulse-speed: 2s;
+            /* New variable for the claim bubble pulse */
+            --claim-pulse-speed: 3s;
         }
         
         * {
@@ -239,16 +241,13 @@
             width: 40px;
             height: 40px;
             border-radius: 8px;
-            /* Remove background color */
             background: none;
             overflow: hidden;
-            /* Ensure image fits perfectly */
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
             box-shadow: 0 0 5px rgba(156, 39, 176, 0.6);
-            /* Reduced shadow for a cleaner frame */
         }
         
         .music-icon img {
@@ -365,6 +364,7 @@
             justify-content: center;
             margin-top: 28px;
         }
+        /* --- CLAIM BUBBLE STYLES (UPDATED) --- */
         
         .claim {
             background: linear-gradient(90deg, #ff4ecb, #7be6ff);
@@ -372,9 +372,39 @@
             padding: 12px 22px;
             border-radius: 22px;
             font-weight: 700;
-            box-shadow: 0 14px 50px rgba(123, 230, 255, .08);
             font-size: 15px;
             cursor: default;
+            position: relative;
+            /* Needed for pseudo-elements or more advanced effects if added later */
+            /* Enhanced Shadow and Initial Subtle Glow */
+            box-shadow: 0 6px 20px rgba(123, 230, 255, 0.2), 0 0 15px rgba(255, 78, 203, 0.6);
+            /* Soft pink glow */
+            /* Pulsing Animation */
+            animation: claimPulse var(--claim-pulse-speed) ease-in-out infinite alternate;
+        }
+        /* Hover Effect for Claim Bubble */
+        
+        .claim:hover {
+            transform: translateY(-3px) scale(1.02);
+            /* Lift slightly and grow a tiny bit */
+            box-shadow: 0 10px 30px rgba(123, 230, 255, 0.4), /* More pronounced shadow */
+            0 0 25px rgba(255, 78, 203, 0.9), /* Brighter pink glow */
+            0 0 40px rgba(123, 230, 255, 0.7);
+            /* Cyan outer glow */
+        }
+        /* Keyframes for the Claim Bubble Pulse Animation */
+        
+        @keyframes claimPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 6px 20px rgba(123, 230, 255, 0.2), 0 0 15px rgba(255, 78, 203, 0.6);
+            }
+            100% {
+                transform: scale(1.01);
+                /* A tiny bit larger */
+                box-shadow: 0 8px 25px rgba(123, 230, 255, 0.3), 0 0 20px rgba(255, 78, 203, 0.8);
+                /* Slightly brighter glow */
+            }
         }
         
         @media (max-width: 550px) {
@@ -445,7 +475,7 @@
             </div>
 
             <div class="bottom-bubble">
-                <div class="claim">Claim your profile • guns.lol/you</div>
+                <div class="claim">Building a world where kindness prevails.</div>
             </div>
         </div>
     </div>
