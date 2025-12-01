@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CHAI POR — Profile</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+         :root {
+            --bg: #0b0b0b;
+            --card: #1b1b1d;
+            --muted: #8f8f96;
+            --accent1: #ffd000;
+            --accent2: #6be7ff;
+            --glow: 0 10px 30px rgba(108, 0, 255, .16);
+        }
+        
+        * {
+            box-sizing: border-box
+        }
+        
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background: var(--bg);
+            font-family: 'Poppins', system-ui, Segoe UI, Roboto, Arial;
+        }
+        /* 3D grid tunnel */
+        
+        .tunnel {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            overflow: hidden;
+            background: #050505;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .grid {
+            width: 180vmax;
+            height: 180vmax;
+            transform: translateZ(-600px);
+            background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 120px 120px;
+            filter: contrast(.6) saturate(1);
+            animation: moveTunnel 10s linear infinite;
+        }
+        
+        @keyframes moveTunnel {
+            0% {
+                transform: translateZ(-800px) rotateX(4deg) rotateY(2deg) scale(1);
+            }
+            50% {
+                transform: translateZ(-600px) rotateX(1deg) rotateY(-1deg) scale(1.02);
+            }
+            100% {
+                transform: translateZ(-800px) rotateX(4deg) rotateY(2deg) scale(1);
+            }
+        }
+        /* floating stars */
+        
+        .dots {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .dot {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.85;
+            filter: blur(.6px);
+        }
+        /* center content */
+        
+        .wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        /* profile card */
+        
+        .card {
+            width: 880px;
+            max-width: 95%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(12, 12, 12, 0.08));
+            border-radius: 22px;
+            padding: 34px;
+            box-shadow: var(--glow);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+        }
+        
+        .top {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 255, 255, 0.03);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            background: linear-gradient(135deg, #0e0e0e, #141214);
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        h1 {
+            margin: 12px 0 6px;
+            font-size: 44px;
+            color: var(--accent1);
+            letter-spacing: 0.6px;
+        }
+        
+        .bio {
+            color: var(--muted);
+            font-size: 16px;
+            max-width: 760px;
+        }
+        
+        .meta {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--muted);
+            font-size: 14px;
+            justify-content: center;
+        }
+        /* social icons row */
+        
+        .socials {
+            margin-top: 18px;
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+        }
+        
+        .sbtn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 18px rgba(108, 0, 255, 0.08);
+            transition: transform .18s, box-shadow .18s, background .18s;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .sbtn:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(108, 0, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        /* stats + view count */
+        
+        .meta-stats {
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            align-items: center;
+            color: var(--muted);
+        }
+        /* Music player */
+        
+        .player-wrap {
+            margin-top: 26px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .player {
+            width: 780px;
+            max-width: 96%;
+            background: rgba(10, 10, 10, 0.6);
+            border-radius: 14px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .music-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #111, #222);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .track-info {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        
+        .track-title {
+            font-weight: 600;
+            color: white;
+            font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .track-sub {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .play-btn,
+        .mute-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: #ffffff11;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .play-btn:hover,
+        .mute-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .progress {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress>i {
+            display: block;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent2), #ff5edb);
+            border-radius: 6px;
+            transition: width .2s linear;
+        }
+        /* bottom bubble */
+        
+        .bottom-bubble {
+            display: flex;
+            justify-content: center;
+            margin-top: 22px;
+        }
+        
+        .claim {
+            background: linear-gradient(90deg, #ff4ecb, #7be6ff);
+            color: black;
+            padding: 10px 18px;
+            border-radius: 18px;
+            font-weight: 700;
+            box-shadow: 0 12px 40px rgba(123, 230, 255, .07);
+        }
+        /* responsiveness */
+        
+        @media (max-width:720px) {
+            h1 {
+                font-size: 34px
+            }
+            .card {
+                padding: 22px
+            }
+            .avatar {
+                width: 86px;
+                height: 86px
+            }
+            .player {
+                flex-direction: column;
+                align-items: stretch
+            }
+            .controls {
+                justify-content: flex-end;
+                margin-top: 8px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- tunnel background -->
+    <div class="tunnel" aria-hidden="true">
+        <div class="grid"></div>
+    </div>
+
+    <!-- floating dots to add depth -->
+    <div class="dots" aria-hidden="true"></div>
+
+    <!-- main -->
+    <div class="wrap">
+        <div class="card" role="main">
+            <div class="top">
+                <div class="avatar" id="avatar">
+                    <!-- Replace avatar.jpg with your image or use an external link -->
+                    <img src="me/finalboss.jpg" alt="CHAI POR avatar" onerror="this.src='https://www.reddit.com/r/CatsBeingCats/comments/1gcdg7h/show_me_your_fav_cat_meme/'">
+                </div>
+
+                <h1>CHAI POR</h1>
+                <div class="bio">Kindness sometimes leads to even greater tragedy.</div>
+
+                <div class="meta">
+                    <div class="meta-stats">
+                        <!-- you can update view count dynamically if desired -->
+                        <div title="location">📍 Phnom Penh Cambodia.</div>
+                    </div>
+                </div>
+
+                <div class="socials" id="socials">
+                    <!-- Replace the href="#" with your real URLs -->
+                    <a class="sbtn" href="https://t.me/Mornchaipor" title="Telegram (replace)" aria-label="Telegram">✈</a>
+                    <a class="sbtn" href="https://github.com/Nomoshii" title="GitHub" aria-label="GitHub">:O</a>
+                    <a class="sbtn" href="https://web.facebook.com/chhaypor4/" title="Facebook" aria-label="Facebook">f</a>
+                </div>
+            </div>
+
+            <!-- music player -->
+            <div class="player-wrap">
+                <div class="player" id="playerCard" role="region" aria-label="Music player">
+                    <div class="music-icon">♪</div>
+
+                    <div class="track-info">
+                        <div class="track-title" id="trackTitle">Loading track...</div>
+                        <div class="track-sub" id="trackSub">YouTube · Click anywhere to unmute</div>
+                        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <i id="progressBar"></i>
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <button class="play-btn" id="playBtn" title="Play / Pause">⏯</button>
+                        <button class="mute-btn" id="muteBtn" title="Mute / Unmute">🔇</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-bubble">
+                <div class="claim">Claim your profile • guns.lol/you</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Hidden YouTube player -->
+    <div id="ytplayer" style="display:none;"></div>
+
+    <script>
+        /* ---------- Floating dots generation ---------- */
+        (function makeDots() {
+            const container = document.querySelector('.dots');
+            const count = 28;
+            for (let i = 0; i < count; i++) {
+                const d = document.createElement('div');
+                d.className = 'dot';
+                const x = Math.random() * 100,
+                    y = Math.random() * 100;
+                const s = 1 + Math.random() * 3;
+                d.style.left = x + 'vw';
+                d.style.top = y + 'vh';
+                d.style.opacity = (0.2 + Math.random() * 0.9).toFixed(2);
+                d.style.transform = `scale(${Math.random()*1.6})`;
+                container.appendChild(d);
+            }
+        })();
+
+        /* ---------- YouTube player setup ---------- */
+        /* Video ID extracted from your link: vHICwpoiM4I */
+        const YT_ID = 'vHICwpoiM4I';
+        let player, isMuted = true;
+
+        /* load youtube iframe api */
+        (function() {
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            document.head.appendChild(tag);
+        })();
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('ytplayer', {
+                height: '0',
+                width: '0',
+                videoId: YT_ID,
+                playerVars: {
+                    autoplay: 1,
+                    controls: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    showinfo: 0,
+                    loop: 1,
+                    playlist: YT_ID,
+                    mute: 1
+                },
+                events: {
+                    onReady: onPlayerReady,
+                    onStateChange: onStateChange
+                }
+            });
+        }
+
+        /* when ready, update UI and start looped play (muted) */
+        function onPlayerReady(e) {
+            e.target.playVideo();
+            isMuted = true;
+            updateTrackInfo();
+            startProgressUpdater();
+        }
+
+        /* show title using YouTube API when available */
+        function updateTrackInfo() {
+            try {
+                const info = player.getVideoData();
+                const title = info && info.title ? info.title : 'YouTube Track';
+                document.getElementById('trackTitle').textContent = title;
+                document.getElementById('trackSub').textContent = 'YouTube · Click anywhere to unmute';
+            } catch (err) {
+                // fallback
+                document.getElementById('trackTitle').textContent = 'YouTube Track';
+            }
+        }
+
+        function onStateChange(e) {
+            // e.data == 1 playing, 2 paused, 0 ended
+            updatePlayBtn();
+        }
+
+        /* Play/Pause control */
+        document.getElementById('playBtn').addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            if (!player) return;
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) player.pauseVideo();
+            else player.playVideo();
+            updatePlayBtn();
+        });
+
+        /* Mute/unmute control */
+        const muteBtn = document.getElementById('muteBtn');
+        muteBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            if (!player) return;
+            if (isMuted) {
+                player.unMute();
+                isMuted = false;
+                muteBtn.textContent = '🔊';
+            } else {
+                player.mute();
+                isMuted = true;
+                muteBtn.textContent = '🔇';
+            }
+        });
+
+        /* update play button icon */
+        function updatePlayBtn() {
+            const b = document.getElementById('playBtn');
+            if (!player) {
+                b.textContent = '⏯';
+                return;
+            }
+            const s = player.getPlayerState();
+            if (s === YT.PlayerState.PLAYING) b.textContent = '⏸';
+            else b.textContent = '▶';
+        }
+
+        /* progress updater */
+        function startProgressUpdater() {
+            const bar = document.getElementById('progressBar');
+            setInterval(() => {
+                if (!player || typeof player.getCurrentTime !== 'function') return;
+                try {
+                    const dur = player.getDuration() || 0;
+                    const cur = player.getCurrentTime() || 0;
+                    const pct = dur ? Math.min(100, (cur / dur) * 100) : 0;
+                    bar.style.width = pct + '%';
+                    // accessibility attr
+                    document.querySelector('.progress').setAttribute('aria-valuenow', Math.round(pct));
+                } catch (e) {}
+            }, 500);
+        }
+
+        /* Clicking anywhere unmute (first click) to satisfy mobile/desktop autoplay restrictions */
+        let firstInteraction = false;
+
+        function userInteractUnmute() {
+            if (firstInteraction) return;
+            firstInteraction = true;
+            if (player && isMuted) {
+                try {
+                    player.unMute();
+                    isMuted = false;
+                    muteBtn.textContent = '🔊';
+                } catch (e) {}
+            }
+            document.removeEventListener('click', userInteractUnmute);
+        }
+        document.addEventListener('click', userInteractUnmute);
+
+        /* initial icon states */
+        updatePlayBtn();
+        muteBtn.textContent = '🔇';
+
+        /* small helper: allow clicking progress bar to seek */
+        document.querySelector('.progress').addEventListener('click', function(e) {
+            if (!player) return;
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const pct = Math.max(0, Math.min(1, x / rect.width));
+            const dur = player.getDuration() || 0;
+            player.seekTo(dur * pct, true);
+        });
+
+        /* Accessibility: keyboard controls */
+        document.addEventListener('keydown', (e) => {
+            if (!player) return;
+            if (e.key === ' ') { // space toggle play/pause
+                e.preventDefault();
+                const s = player.getPlayerState();
+                if (s === YT.PlayerState.PLAYING) player.pauseVideo();
+                else player.playVideo();
+                updatePlayBtn();
+            } else if (e.key === 'm' || e.key === 'M') {
+                if (isMuted) {
+                    player.unMute();
+                    isMuted = false;
+                    muteBtn.textContent = '🔊';
+                } else {
+                    player.mute();
+                    isMuted = true;
+                    muteBtn.textContent = '🔇';
+                }
+            }
+        });
+
+        /* Prevent accidental text selection when double clicking on mobile */
+        document.addEventListener('touchstart', function() {}, {
+            passive: true
+        });
+    </script>
+
+</body>
+
+</html>
