@@ -18,13 +18,15 @@
             --player-fg: #ffffff;
             --glow: 0 10px 40px rgba(156, 39, 176, 0.4);
             --pulse-speed: 2s;
-            /* New variable for the claim bubble pulse */
             --claim-pulse-speed: 3s;
+            --cyber-glow-color1: #7be6ff;
+            --cyber-glow-color2: #ff4ecb;
+            --cyber-glow-color3: #9c27b0;
         }
         
         * {
             box-sizing: border-box;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease-out;
         }
         
         html,
@@ -317,9 +319,18 @@
             display: block;
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
-            border-radius: 6px;
-            transition: width .2s linear;
+            background-image: repeating-linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 0, rgba(255, 255, 255, 0.2) 1px, transparent 2px, transparent 6px), linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+            background-size: 200% 100%;
+            animation: flowProgress 8s linear infinite;
+        }
+        
+        @keyframes flowProgress {
+            0% {
+                background-position: 100% 0;
+            }
+            100% {
+                background-position: 0% 0;
+            }
         }
         /* --- CONTROL BUTTON STYLES (General) --- */
         
@@ -364,48 +375,73 @@
             justify-content: center;
             margin-top: 28px;
         }
-        /* --- CLAIM BUBBLE STYLES (UPDATED) --- */
+        /* --- CLAIM BUBBLE STYLES (CYBER ALERT BOX) --- */
         
         .claim {
-            background: linear-gradient(90deg, #ff4ecb, #7be6ff);
-            color: black;
-            padding: 12px 22px;
-            border-radius: 22px;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: default;
-            position: relative;
-            /* Needed for pseudo-elements or more advanced effects if added later */
-            /* Enhanced Shadow and Initial Subtle Glow */
-            box-shadow: 0 6px 20px rgba(123, 230, 255, 0.2), 0 0 15px rgba(255, 78, 203, 0.6);
+            /* INCREASE TEXT SIZE */
+            font-size: 17px;
+            letter-spacing: 0.5px;
+            /* HIGH CONTRAST ALERT BACKGROUND */
+            background: linear-gradient(90deg, #ff4ecb 10%, #7be6ff 90%);
+            color: #0b0b0b;
+            /* Ensure text is dark for high contrast */
+            padding: 14px 28px;
+            /* Slightly larger padding */
+            /* SHARP CORNERS */
+            border-radius: 8px;
+            /* Sharper corners */
+            /* REMOVE PULSE ANIMATION for static alert look */
+            animation: none;
+            /* INITIAL GLOW (High contrast, defined glow) */
+            box-shadow: 0 0 0 2px rgba(123, 230, 255, 0.5), /* Sharp inner glow line */
+            0 0 15px rgba(255, 78, 203, 0.8);
             /* Soft pink glow */
-            /* Pulsing Animation */
-            animation: claimPulse var(--claim-pulse-speed) ease-in-out infinite alternate;
+            transform: none;
+            /* No initial tilt */
+            filter: none;
+            position: relative;
+            z-index: 1;
+            /* Above pseudo-elements */
+            overflow: hidden;
         }
-        /* Hover Effect for Claim Bubble */
+        /* Hover Effect for Claim Bubble (Alert Flash) */
         
         .claim:hover {
-            transform: translateY(-3px) scale(1.02);
-            /* Lift slightly and grow a tiny bit */
-            box-shadow: 0 10px 30px rgba(123, 230, 255, 0.4), /* More pronounced shadow */
-            0 0 25px rgba(255, 78, 203, 0.9), /* Brighter pink glow */
-            0 0 40px rgba(123, 230, 255, 0.7);
-            /* Cyan outer glow */
+            transform: scale(1.02);
+            /* Slight scale on hover */
+            cursor: pointer;
+            box-shadow: 0 0 0 3px var(--cyber-glow-color1), /* Brighter cyan frame */
+            0 0 20px var(--cyber-glow-color2);
+            /* Intense pink glow */
         }
-        /* Keyframes for the Claim Bubble Pulse Animation */
+        /* NEW: Alert Frame / Inner Glow Effect */
         
-        @keyframes claimPulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 6px 20px rgba(123, 230, 255, 0.2), 0 0 15px rgba(255, 78, 203, 0.6);
-            }
+        .claim::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            /* Makes the pseudo-element extend slightly beyond the border */
+            border-radius: 10px;
+            /* Sharp, repeating border lines */
+            background: linear-gradient( 45deg, var(--accent-purple) 0%, var(--accent-cyan) 50%, var(--accent-purple) 100%);
+            /* This is the key: mask the pseudo-element to create a double border */
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.7;
+            animation: borderFlow 4s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes borderFlow {
             100% {
-                transform: scale(1.01);
-                /* A tiny bit larger */
-                box-shadow: 0 8px 25px rgba(123, 230, 255, 0.3), 0 0 20px rgba(255, 78, 203, 0.8);
-                /* Slightly brighter glow */
+                transform: rotate(360deg);
             }
         }
+        /* Keyframes for the Claim Bubble Pulse Animation (Removed, but kept here for reference if needed later) */
+        /* @keyframes claimPulse { ... } */
         
         @media (max-width: 550px) {
             .card {
@@ -442,7 +478,6 @@
                 <div class="bio">There Are Only So Many Lives I Can Value. And I Decided Who Those People Were Six Years Ago. So You Shouldn’t Try To Ask For My Pity. Because Right Now, I Don’t Have Time To Spare Or Room In My Heart.</div>
                 <div class="meta">📍 Phnom Penh, Cambodia</div>
             </div>
-
             <div class="player-wrap">
                 <div class="player" id="playerCard">
                     <div class="top-row">
@@ -467,9 +502,9 @@
                     </div>
 
                     <div class="social-icons-row">
+                        <a class="control-btn" href="https://web.facebook.com/chhaypor4/">f</a>
                         <a class="control-btn" href="https://t.me/Mornchaipor">✈</a>
                         <a class="control-btn" href="https://github.com/Nomoshii">:O</a>
-                        <a class="control-btn" href="https://web.facebook.com/chhaypor4/">f</a>
                     </div>
                 </div>
             </div>
